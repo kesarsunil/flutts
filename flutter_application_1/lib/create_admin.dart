@@ -49,7 +49,7 @@ class _CreateAdminPageState extends State<CreateAdminPage> {
       // Create admin account
       UserCredential userCredential = await FirebaseAuth.instance
           .createUserWithEmailAndPassword(
-            email: '99230041249@klu.ac.in',
+            email: 'kesharsunil1@gmail.com',
             password: '123456',
           );
 
@@ -58,7 +58,7 @@ class _CreateAdminPageState extends State<CreateAdminPage> {
       setState(() {
         _message =
             'Admin account created successfully!\n\n'
-            'Email: 99230041249@klu.ac.in\n'
+            'Email: kesharsunil1@gmail.com\n'
             'Password: 123456\n\n'
             'You can now delete this file and use the main app.';
         _isCreating = false;
@@ -68,7 +68,7 @@ class _CreateAdminPageState extends State<CreateAdminPage> {
         if (e.code == 'email-already-in-use') {
           _message =
               'Admin account already exists!\n\n'
-              'Email: 99230041249@klu.ac.in\n'
+              'Email: kesharsunil1@gmail.com\n'
               'Password: 123456\n\n'
               'You can use these credentials to sign in.';
         } else {
@@ -111,7 +111,7 @@ class _CreateAdminPageState extends State<CreateAdminPage> {
               const SizedBox(height: 16),
               const Text(
                 'Click the button below to create the admin account with credentials:\n\n'
-                'Email: 99230041249@klu.ac.in\n'
+                'Email: kesharsunil1@gmail.com\n'
                 'Password: 123456',
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 16),

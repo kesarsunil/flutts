@@ -442,22 +442,31 @@ class _AllBookingsListWidgetState extends State<_AllBookingsListWidget> {
   }
 
   Widget _buildBookingCard(Map<String, dynamic> data) {
-    final userEmail = data['userEmail'] ?? 'Unknown';
-    final userName =
-        data['userName'] ??
-        data['userEmail']?.toString().split('@')[0] ??
-        'User';
-    final slotId = data['slotId'] ?? 'Unknown';
-    final vehicleType = data['vehicleType'] ?? 'Car';
-    final pricePerMinute = data['pricePerMinute'] ?? 100;
-    final bookingTime =
-        (data['bookingTime'] as Timestamp?)?.toDate() ?? DateTime.now();
-    final leaveTime = data['leaveTime'] != null
-        ? (data['leaveTime'] as Timestamp).toDate()
+    final userEmail = (data['userEmail'] ?? 'Unknown').toString();
+    final rawUserName = data['userName'];
+    final userName = (rawUserName != null && rawUserName.toString().isNotEmpty)
+        ? rawUserName.toString()
+        : userEmail.contains('@')
+        ? userEmail.split('@')[0]
+        : 'User';
+    final slotId = (data['slotId'] ?? 'Unknown').toString();
+    final vehicleType = (data['vehicleType'] ?? 'Car').toString();
+    final pricePerMinute = (data['pricePerMinute'] is num)
+        ? (data['pricePerMinute'] as num).toDouble()
+        : 100.0;
+    final bookingTimestamp = data['bookingTime'];
+    final bookingTime = bookingTimestamp is Timestamp
+        ? bookingTimestamp.toDate()
+        : DateTime.now();
+    final leaveTimestamp = data['leaveTime'];
+    final leaveTime = leaveTimestamp is Timestamp
+        ? leaveTimestamp.toDate()
         : null;
-    final isActive = data['isActive'] ?? false;
-    final amount = data['amount'] ?? 0;
-    final paid = data['paid'] ?? false;
+    final isActive = data['isActive'] == true;
+    final amount = (data['amount'] is num)
+        ? (data['amount'] as num).toInt()
+        : 0;
+    final paid = data['paid'] == true;
 
     final duration = leaveTime != null
         ? leaveTime.difference(bookingTime)
@@ -484,7 +493,9 @@ class _AllBookingsListWidgetState extends State<_AllBookingsListWidget> {
                 CircleAvatar(
                   backgroundColor: Colors.deepPurple.shade100,
                   child: Text(
-                    userName.substring(0, 1).toUpperCase(),
+                    userName.isNotEmpty
+                        ? userName.substring(0, 1).toUpperCase()
+                        : 'U',
                     style: TextStyle(
                       color: Colors.deepPurple.shade700,
                       fontWeight: FontWeight.bold,

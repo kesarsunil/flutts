@@ -61,7 +61,7 @@ class _AdminSignInPageState extends State<AdminSignInPage> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   // Admin credentials
-  static const String adminEmail = '99230041249@klu.ac.in';
+  static const String adminEmail = 'kesharsunil1@gmail.com';
   static const String adminPassword = '123456';
 
   @override
@@ -78,14 +78,26 @@ class _AdminSignInPageState extends State<AdminSignInPage> {
       });
 
       try {
+        final email = _emailController.text.trim();
+        final password = _passwordController.text;
+
         // Check if credentials match admin
-        if (_emailController.text.trim() == adminEmail &&
-            _passwordController.text == adminPassword) {
-          // Sign in with Firebase
-          await _auth.signInWithEmailAndPassword(
-            email: _emailController.text.trim(),
-            password: _passwordController.text,
-          );
+        if (email == adminEmail && password == adminPassword) {
+          try {
+            // Try Firebase sign-in if the admin account exists.
+            await _auth.signInWithEmailAndPassword(
+              email: email,
+              password: password,
+            );
+          } on FirebaseAuthException catch (e) {
+            // The app may use a hardcoded admin account without a matching
+            // Firebase Auth user. Allow the admin flow to continue in that case.
+            if (e.code != 'user-not-found' &&
+                e.code != 'wrong-password' &&
+                e.code != 'invalid-credential') {
+              rethrow;
+            }
+          }
 
           if (mounted) {
             Navigator.of(context).pushReplacement(
